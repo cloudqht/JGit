@@ -26,6 +26,12 @@ public class JGitTest {
         JGitUtils.add(git,filepattern);
         JGitUtils.commit(git, "first commit");
         JGitUtils.printLog(git);
-        JGitUtils.push(git, username, password, remoteName, branchName, privateToken);
+//        JGitUtils.push(git, username, password, remoteName, branchName, privateToken);
+//        JGitUtils.pull(git, username, password, branchName, privateToken);
+//        JGitUtils.branchCreate(git, "dev");
+//        JGitUtils.branchCheckout(git, "dev");
+//        JGitUtils.branchDelete(git, "dev");
+        JGitUtils.branchList(git);
+
     }
 }

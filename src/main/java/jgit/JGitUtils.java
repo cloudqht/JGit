@@ -2,6 +2,7 @@ package jgit;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+
 /*
 * JGit 的 API 有两种基本的层次：底层命令和高层命令。
 * 这个两个术语都来自 Git ，并且 JGit 也被按照相同的方式粗略地划分：
@@ -70,10 +73,10 @@ import java.util.Iterator;
     RevTree 代表树对象
 * */
 public class JGitUtils {
-    public static Git openRpo(String dir){
+    public static Git openRpo(String dir) {
         Git git = null;
         try {
-            Repository repo = new FileRepositoryBuilder().setGitDir(new File(dir,".git")).build();
+            Repository repo = new FileRepositoryBuilder().setGitDir(new File(dir, ".git")).build();
             git = new Git(repo);
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,7 +84,7 @@ public class JGitUtils {
         return git;
     }
 
-    public static Git openNowRpo(){
+    public static Git openNowRpo() {
         Git git = null;
         try {
             Repository repo = new FileRepositoryBuilder().readEnvironment().findGitDir().build();
@@ -92,7 +95,7 @@ public class JGitUtils {
         return git;
     }
 
-    public static Git initRpo(String dir){
+    public static Git initRpo(String dir) {
         Git git = null;
         try {
             git = Git.init().setDirectory(new File(dir)).call();
@@ -101,48 +104,51 @@ public class JGitUtils {
         }
         return git;
     }
-    public static void add(Git git, String filepattern){
+
+    public static void add(Git git, String filepattern) {
         try {
             git.add().addFilepattern(filepattern).call();
         } catch (GitAPIException e) {
             e.printStackTrace();
         }
     }
-    public static void commit(Git git, String commitMessage){
+
+    public static void commit(Git git, String commitMessage) {
         try {
             git.commit().setMessage(commitMessage).call();
         } catch (GitAPIException e) {
             e.printStackTrace();
         }
     }
-    public static void printLog(Git git){
-        Iterable<RevCommit> iterable= null;
+
+    public static void printLog(Git git) {
+        Iterable<RevCommit> iterable = null;
         try {
             iterable = git.log().call();
-            Iterator<RevCommit> iter=iterable.iterator();
-            while (iter.hasNext()){
-                RevCommit commit=iter.next();
-                String email=commit.getAuthorIdent().getEmailAddress();
-                String name=commit.getAuthorIdent().getName();  //作者
+            Iterator<RevCommit> iter = iterable.iterator();
+            while (iter.hasNext()) {
+                RevCommit commit = iter.next();
+                String email = commit.getAuthorIdent().getEmailAddress();
+                String name = commit.getAuthorIdent().getName();  //作者
 
-                String commitEmail=commit.getCommitterIdent().getEmailAddress();//提交者
-                String commitName=commit.getCommitterIdent().getName();
+                String commitEmail = commit.getCommitterIdent().getEmailAddress();//提交者
+                String commitName = commit.getCommitterIdent().getName();
 
-                int time=commit.getCommitTime();
+                int time = commit.getCommitTime();
 
-                String fullMessage=commit.getFullMessage();
-                String shortMessage=commit.getShortMessage();  //返回message的firstLine
+                String fullMessage = commit.getFullMessage();
+                String shortMessage = commit.getShortMessage();  //返回message的firstLine
 
-                String commitID=commit.getName();  //这个应该就是提交的版本号
+                String commitID = commit.getName();  //这个应该就是提交的版本号
 
-                System.out.println("authorEmail:"+email);
-                System.out.println("authorName:"+name);
-                System.out.println("commitEmail:"+commitEmail);
-                System.out.println("commitName:"+commitName);
-                System.out.println("time:"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time * 1000L));
-                System.out.println("fullMessage:"+fullMessage);
-                System.out.println("shortMessage:"+shortMessage);
-                System.out.println("commitID:"+commitID);
+                System.out.println("authorEmail:" + email);
+                System.out.println("authorName:" + name);
+                System.out.println("commitEmail:" + commitEmail);
+                System.out.println("commitName:" + commitName);
+                System.out.println("time:" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time * 1000L));
+                System.out.println("fullMessage:" + fullMessage);
+                System.out.println("shortMessage:" + shortMessage);
+                System.out.println("commitID:" + commitID);
             }
         } catch (GitAPIException e) {
             e.printStackTrace();
@@ -151,7 +157,7 @@ public class JGitUtils {
     }
 
 
-    public static void push(Git git, String username, String password, String remoteName, String branchName, String privateToken){
+    public static void push(Git git, String username, String password, String remoteName, String branchName, String privateToken) {
         CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, privateToken);
         try {
             git.push()
@@ -159,6 +165,52 @@ public class JGitUtils {
                     .setRefSpecs(new RefSpec(branchName))
                     .setCredentialsProvider(provider)
                     .call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void pull(Git git, String username, String password, String branchName, String privateToken) {
+        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, privateToken);
+        try {
+            git.pull()
+                    .setRemoteBranchName(branchName)
+                    .setCredentialsProvider(provider)
+                    .call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void branchCreate(Git git, String branchName) {
+        try {
+            Ref ref = git.branchCreate().setName(branchName).call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void branchDelete(Git git, String branchName) {
+        try {
+            git.branchDelete().setBranchNames(branchName).call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void branchCheckout(Git git, String branchName) {
+        try {
+            Ref ref = git.checkout().setName(branchName).call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void branchList(Git git) {
+        try {
+            List<Ref> call = git.branchList().call();     //得到所有分支信息
+            for (Ref ref : call)
+                System.out.println(ref);
         } catch (GitAPIException e) {
             e.printStackTrace();
         }
