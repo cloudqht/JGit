@@ -12,9 +12,9 @@ public class JGitTest {
     static String localPath2 = "D:\\coding\\jgitTest";
     static String username = "PRIVATE-TOKEN";
     static String password = "";
-    static String privateToken = "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";
+    static String privateToken = "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";
     static String remoteName = "origin";
-    static String branchName = "master";
+    static String branchName = "dev";
     public static void main(String[] args) {
 //        System.out.println(JGitUtils.openRpo(localPath));
 //        System.out.println(JGitUtils.openNowRpo());
@@ -24,8 +24,14 @@ public class JGitTest {
         Git git = JGitUtils.openNowRpo();
         String filepattern = ".";
         JGitUtils.add(git,filepattern);
-        JGitUtils.commit(git, "first commit");
-        JGitUtils.printLog(git);
-        JGitUtils.push(git, username, password, remoteName, branchName, privateToken);
+        JGitUtils.commit(git, "second commit");
+//        JGitUtils.printLog(git);
+//        JGitUtils.push(git, username, password, remoteName, branchName, privateToken);
+//        JGitUtils.pull(git, username, password, branchName, privateToken);
+//        JGitUtils.branchCreate(git, "dev");
+//        JGitUtils.branchCheckout(git, "dev");
+//        JGitUtils.branchDelete(git, "dev");
+//        JGitUtils.branchList(git);
+
     }
 }
