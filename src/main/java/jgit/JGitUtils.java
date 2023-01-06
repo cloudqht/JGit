@@ -171,7 +171,8 @@ public class JGitUtils {
     }
 
     public static void pull(Git git, String username, String password, String branchName, String privateToken) {
-        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, privateToken);
+//        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, privateToken);
+        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, password);
         try {
             git.pull()
                     .setRemoteBranchName(branchName)
