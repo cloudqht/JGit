@@ -10,8 +10,9 @@ import java.util.Set;
 public class JGitTest {
     static String localPath = "D:\\data\\magic-api2";
     static String localPath2 = "D:\\coding\\jgitTest";
-//    static String username = "PRIVATE-TOKEN";
-    static String username = "16638838362";
+    static String username = "PRIVATE-TOKEN";
+//    static String username = "1286020832@qq.com";
+//    static String password = "qht123mmm";
     static String password = "74ad1b20c9c7415e6249e2f32f582967";
     static String privateToken = "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";
     static String remoteName = "origin";
@@ -24,11 +25,11 @@ public class JGitTest {
 //        Git git = JGitUtils.openRpo(localPath);
         Git git = JGitUtils.openNowRpo();
         String filepattern = ".";
-        JGitUtils.add(git,filepattern);
-        JGitUtils.commit(git, "second commit");
+//        JGitUtils.add(git,filepattern);
+//        JGitUtils.commit(git, "second commit");
 //        JGitUtils.printLog(git);
 //        JGitUtils.push(git, username, password, remoteName, branchName, privateToken);
-//        JGitUtils.pull(git, username, password, branchName, privateToken);
+        JGitUtils.pull(git, username, password, branchName, privateToken);
 //        JGitUtils.branchCreate(git, "dev");
 //        JGitUtils.branchCheckout(git, "dev");
 //        JGitUtils.branchDelete(git, "dev");

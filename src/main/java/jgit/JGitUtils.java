@@ -158,7 +158,8 @@ public class JGitUtils {
 
 
     public static void push(Git git, String username, String password, String remoteName, String branchName, String privateToken) {
-        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, privateToken);
+//        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, privateToken);
+        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, password);
         try {
             git.push()
                     .setRemote(remoteName)
@@ -171,8 +172,8 @@ public class JGitUtils {
     }
 
     public static void pull(Git git, String username, String password, String branchName, String privateToken) {
-//        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, privateToken);
-        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, password);
+        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, privateToken);
+//        CredentialsProvider provider = new UsernamePasswordCredentialsProvider(username, password);
         try {
             git.pull()
                     .setRemoteBranchName(branchName)
